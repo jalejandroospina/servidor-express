@@ -19,10 +19,12 @@ class Contenedor
             {
                 try
                 {
-                    const objString = JSON.stringify(obj,null,2);   // Guardar obj en String 
-                    productos.push(objString); // pusheo el string al array
-                    await fs.promises.writeFile('./file.txt',productos); // sobreescribo el archivo
+                    
+                    productos.push(obj); // pusheo el string al array
+                    const objString = JSON.stringify(productos, null, 2); // Guardar obj en String
+                    await fs.promises.writeFile("./file.txt", objString); // sobreescribo el archivo
                  
+                   
                 }
                 catch(e)
                 {
@@ -39,7 +41,7 @@ class Contenedor
                 try
                     {
                         const read = await fs.promises.readFile('./file.txt','utf-8'); // leo el archivo
-                        console.log("leo del archivo un tipo " +  typeof read); // recibo string
+                        //console.log("leo del archivo un tipo " +  typeof read); // recibo string
                         const stringObj = JSON.parse(read); // lo convierto en obj
 
                         //recorrer array para saber id
@@ -69,7 +71,9 @@ class Contenedor
                         const read = await fs.promises.readFile('./file.txt','utf-8'); // leo el archivo
                         const stringObj = JSON.parse(read); // lo convierto en obj
                         console.log(stringObj); // muestro el objeto con los elementos 
-                                            
+                        return stringObj
+
+                                    
                     }
                     catch (err)
                     {
@@ -77,6 +81,7 @@ class Contenedor
                     }
 
             })()
+            
         }
 
         deleteAll()
@@ -99,7 +104,7 @@ class Contenedor
         }
         
 
-        deletById(id)
+        deleteById(id)
         {
 
             (async()=>
@@ -114,14 +119,11 @@ class Contenedor
                         const isProduct = product.id === id; 
                         return isProduct;
                         })
-                        console.log(indexById);
 
-                        productos.splice(indexById,1); // elimino el item por su indice
-                        console.log(stringObj);
-
+                        stringObj.splice(indexById,1); // elimino el item por su indice
+            
                         const objString = JSON.stringify(stringObj,null,2);   // Guardar obj en String 
-                        productos.push(objString); // pusheo el string al array
-                        await fs.promises.writeFile('./file.txt',productos); // sobreescribo el archivo
+                        await fs.promises.writeFile('./file.txt',objString); // sobreescribo el archivo
                                             
                     }
                     catch (err)
@@ -136,12 +138,5 @@ class Contenedor
         }
         
     }
- 
 
-    //const producto = new Contenedor("file.txt");
-    //producto.getAll();
-
-    module.exports = {
-        Contenedor
-
-    }
+    module.exports = new Contenedor("file.txt");
